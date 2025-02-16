@@ -1,0 +1,29 @@
+.movie {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.4rem;
+  border-bottom: 0.5px solid #444;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.movie:hover {
+  background-color: var(--color-background-500);
+}
+.movie__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.movie__name {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.movie__year {
+  font-size: 1.6rem;
+}
