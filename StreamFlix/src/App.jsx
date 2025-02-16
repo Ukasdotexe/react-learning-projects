@@ -14,8 +14,12 @@ function App() {
 
 function Header() {
   return (
-    <header style={{ gridColumn: 2 }}>
-      <span>🍿 StreamFlix</span>
+    <header className="header">
+      <h1>🎬 StreamFlix</h1>
+      <input placeholder="Search movies..." type="text" />
+      <span>
+        Found <strong>0</strong> results
+      </span>
     </header>
   );
 }
