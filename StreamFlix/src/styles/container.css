@@ -1,0 +1,26 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 3rem;
+  column-gap: 2rem;
+  height: calc(100vh - 4.8rem);
+}
+/* 
+className="movie-overview"
+style={{
+  backgroundColor: "blue",
+  justifySelf: "left",
+  width: "300px",
+}} */
+
+.movies-list,
+.movie-overview {
+  background-color: var(--color-background-100);
+  justify-self: right;
+  width: 42rem;
+  border-radius: var(--base-border-radius);
+}
+
+.movie-overview {
+  justify-self: left;
+}

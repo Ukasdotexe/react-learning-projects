@@ -1,9 +1,31 @@
 import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
+  return (
+    <>
+      <div className="container">
+        <Header />
+        <MoviesList />
+        <MovieOverView />
+      </div>
+    </>
+  );
+}
 
-  return <></>;
+function Header() {
+  return (
+    <header style={{ gridColumn: 2 }}>
+      <span>🍿 StreamFlix</span>
+    </header>
+  );
+}
+
+function MoviesList() {
+  return <ul className="movies-list">Movies list</ul>;
+}
+
+function MovieOverView() {
+  return <div className="movie-overview">Movie OverView</div>;
 }
 
 export default App;
