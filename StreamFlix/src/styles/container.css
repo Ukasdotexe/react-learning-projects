@@ -9,7 +9,7 @@
 .movies-list,
 .movie-overview {
   position: relative;
-  background-color: var(--color-background-100);
+  background-color: var(--color-background-500);
   justify-self: right;
   min-width: 42rem;
   border-radius: var(--base-border-radius);

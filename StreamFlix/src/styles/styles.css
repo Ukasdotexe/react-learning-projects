@@ -1,5 +1,8 @@
+@import "font-awesome/css/font-awesome.min.css";
 @import url("./global.css");
 @import url("./container.css");
 @import url("./header.css");
 @import url("./movie.css");
 @import url("./movieInfo.css");
+@import url("./movieReview.css");
+@import url("./rating.css");

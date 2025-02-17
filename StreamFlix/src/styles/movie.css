@@ -10,7 +10,7 @@
 }
 
 .movie:hover {
-  background-color: var(--color-background-500);
+  background-color: var(--color-background-100);
 }
 .movie__info {
   display: flex;

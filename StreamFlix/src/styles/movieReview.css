@@ -1,0 +1,25 @@
+.review {
+  padding: 3.2rem;
+  padding-top: 5rem;
+}
+
+.review .rating {
+  padding: 2.2rem 2.6rem;
+  border-radius: var(--base-border-radius);
+  background-color: var(--color-background-100);
+  margin-bottom: 3rem;
+
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.review .stars {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.review .rate {
+  font-size: 2rem;
+  color: gold;
+}

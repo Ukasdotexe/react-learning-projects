@@ -85,8 +85,12 @@ function MoviesList() {
 
 function MovieOverView() {
   return (
-    <div className="movie-overview">
+    <div
+      // style={{ display: "grid", gridTemplateRows: "auto 1fr" }}
+      className="movie-overview"
+    >
       <MovieDetails />
+      <MovieReview />
     </div>
   );
 }
@@ -107,6 +111,8 @@ function MovieDetails() {
   const imageLink =
     "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg";
 
+  const [hovered, setHovered] = useState(false);
+
   return (
     <div className="movie-details">
       <img src={imageLink} />
@@ -114,7 +120,19 @@ function MovieDetails() {
         <h2 className="title">Inception</h2>
         <span className="release-data">16 Jul 2010 . 148 min</span>
         <span className="categorie">Action, Aventure, Sci-Fi</span>
-        <span className="rating">⭐ 8.8 IMDb rating</span>
+
+        <div className="rating">
+          <span>
+            <i
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              className={`fa fa-star star-icon ${!hovered ? "fa-star-o" : ""}`}
+            ></i>
+            {/* <i className="fa fa-star star-icon fa-star-o"></i> */}
+          </span>
+          <span>8.8 IMDb rating</span>
+        </div>
+        {/* <i className="fa fa-star star-icon"></i> */}
       </div>
       <span className="circle">-</span>
       <span className="back">&#8592;</span>
@@ -122,19 +140,39 @@ function MovieDetails() {
   );
 }
 
-// function MovieDetails() {
+function MovieReview() {
+  return (
+    <div className="review">
+      <Rating />
+    </div>
+  );
+}
+function Rating() {
+  return (
+    <div className="rating">
+      <ul className="stars">
+        {Array.from({ length: 10 }, (_, i) => i).map((el) => (
+          <Star />
+        ))}
+      </ul>
+      <span className="rate"> 10</span>
+    </div>
+  );
+}
 
-//   return (
-//     <div className="movie-details">
-//       <img src={imageLink} alt="" />
-//       <div>
-//         <h2 className="title">Inception</h2>
-//         <span className="release-data">16 Jul 2010 . 148 min</span>
-//         <span className="categorie">Action, Aventure, Sci-Fi</span>
-//         <span className="rating">⭐ 8.8 IMDb rating</span>
-//       </div>
-//     </div>
-//   );
-// }
+function Star() {
+  const [hovered, setHovered] = useState(false);
 
+  return (
+    <li>
+      <i
+        onMouseEnter={() => setHovered((is) => !is)}
+        // onMouseLeave={() => setHovered(false)}
+        className={`fa fa-star star-icon large-star ${
+          !hovered ? "fa-star-o" : ""
+        }`}
+      ></i>
+    </li>
+  );
+}
 export default App;

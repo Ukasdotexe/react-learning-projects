@@ -35,6 +35,10 @@ img {
   width: 100%;
 }
 
+ul {
+  list-style: none;
+}
+
 .circle {
   position: absolute;
   right: 10px;
@@ -50,4 +54,13 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.star-icon {
+  color: gold;
+  cursor: pointer;
+}
+
+.large-star {
+  font-size: 3rem;
 }
