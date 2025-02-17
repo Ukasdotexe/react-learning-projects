@@ -11,7 +11,7 @@
   position: relative;
   background-color: var(--color-background-500);
   justify-self: right;
-  min-width: 42rem;
+  width: 45rem;
   border-radius: var(--base-border-radius);
 }
 

@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import "./styles/movieDetails.css";
 
 const tempMovieData = [
   {
@@ -111,8 +110,6 @@ function MovieDetails() {
   const imageLink =
     "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg";
 
-  const [hovered, setHovered] = useState(false);
-
   return (
     <div className="movie-details">
       <img src={imageLink} />
@@ -123,16 +120,10 @@ function MovieDetails() {
 
         <div className="rating">
           <span>
-            <i
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              className={`fa fa-star star-icon ${!hovered ? "fa-star-o" : ""}`}
-            ></i>
-            {/* <i className="fa fa-star star-icon fa-star-o"></i> */}
+            <i className={`fa fa-star star-icon }`}></i>
           </span>
           <span>8.8 IMDb rating</span>
         </div>
-        {/* <i className="fa fa-star star-icon"></i> */}
       </div>
       <span className="circle">-</span>
       <span className="back">&#8592;</span>
@@ -144,9 +135,21 @@ function MovieReview() {
   return (
     <div className="review">
       <Rating />
+      <p className="story">
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita nobis
+        aliquam itaque repellendus voluptas eligendi consequatur? Quam
+        consectetur deserunt dolores repellendus magnam esse possimus minima,
+        adipisci nobis enim error ab!
+      </p>
+
+      <p className="actors">
+        Starring Leonardo DiCaprio,Joseph Gordon-Levitt,Elliot Page
+      </p>
+      <p className="directed-by">Directed by Christopher Nolan</p>
     </div>
   );
 }
+
 function Rating() {
   return (
     <div className="rating">
@@ -156,6 +159,7 @@ function Rating() {
         ))}
       </ul>
       <span className="rate"> 10</span>
+      <div className="btn-add-to-list">+ Add to list</div>
     </div>
   );
 }
@@ -175,4 +179,5 @@ function Star() {
     </li>
   );
 }
+
 export default App;

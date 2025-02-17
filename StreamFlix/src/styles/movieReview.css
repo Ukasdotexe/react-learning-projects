@@ -1,25 +1,50 @@
 .review {
+  font-size: 1.6rem;
   padding: 3.2rem;
-  padding-top: 5rem;
 }
 
 .review .rating {
   padding: 2.2rem 2.6rem;
   border-radius: var(--base-border-radius);
   background-color: var(--color-background-100);
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 2rem;
+  column-gap: 0.2rem;
+  row-gap: 2rem;
 }
 
 .review .stars {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
 }
 
 .review .rate {
   font-size: 2rem;
+  font-weight: bold;
   color: gold;
+}
+
+.review .btn-add-to-list {
+  grid-column: 1/-1;
+  font-size: 1.8rem;
+  font-weight: 600;
+  padding: 1.2rem;
+  text-align: center;
+  background: var(--color-primary);
+  border-radius: 1000rem;
+  cursor: pointer;
+}
+.review .story {
+  line-height: 1.6;
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.review .actors {
+  line-height: 1.5;
+  margin-bottom: 2rem;
 }
