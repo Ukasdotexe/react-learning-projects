@@ -1,4 +1,5 @@
 import { useState } from "react";
+// import "./styles/movieDetails.css";
 
 const tempMovieData = [
   {
@@ -75,17 +76,22 @@ function MoviesList() {
   return (
     <ul className="movies-list">
       {tempMovieData.map((movie) => {
-        return <Movie key={movie.imdbID} movie={movie} />;
+        return <MovieCard key={movie.imdbID} movie={movie} />;
       })}
+      <span className="circle">-</span>
     </ul>
   );
 }
 
 function MovieOverView() {
-  return <div className="movie-overview">Movie OverView</div>;
+  return (
+    <div className="movie-overview">
+      <MovieDetails />
+    </div>
+  );
 }
 
-function Movie({ movie }) {
+function MovieCard({ movie }) {
   return (
     <div className="movie">
       <img src={movie.Poster} />
@@ -96,4 +102,39 @@ function Movie({ movie }) {
     </div>
   );
 }
+
+function MovieDetails() {
+  const imageLink =
+    "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg";
+
+  return (
+    <div className="movie-details">
+      <img src={imageLink} />
+      <div className="content">
+        <h2 className="title">Inception</h2>
+        <span className="release-data">16 Jul 2010 . 148 min</span>
+        <span className="categorie">Action, Aventure, Sci-Fi</span>
+        <span className="rating">⭐ 8.8 IMDb rating</span>
+      </div>
+      <span className="circle">-</span>
+      <span className="back">&#8592;</span>
+    </div>
+  );
+}
+
+// function MovieDetails() {
+
+//   return (
+//     <div className="movie-details">
+//       <img src={imageLink} alt="" />
+//       <div>
+//         <h2 className="title">Inception</h2>
+//         <span className="release-data">16 Jul 2010 . 148 min</span>
+//         <span className="categorie">Action, Aventure, Sci-Fi</span>
+//         <span className="rating">⭐ 8.8 IMDb rating</span>
+//       </div>
+//     </div>
+//   );
+// }
+
 export default App;

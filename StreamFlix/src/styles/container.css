@@ -8,9 +8,10 @@
 
 .movies-list,
 .movie-overview {
+  position: relative;
   background-color: var(--color-background-100);
   justify-self: right;
-  width: 42rem;
+  min-width: 42rem;
   border-radius: var(--base-border-radius);
 }
 

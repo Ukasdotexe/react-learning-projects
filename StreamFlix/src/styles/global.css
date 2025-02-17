@@ -34,3 +34,20 @@ img {
   display: block;
   width: 100%;
 }
+
+.circle {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-background-900);
+  border-radius: 50%;
+  font-size: 1.6rem;
+  font-weight: bold;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
