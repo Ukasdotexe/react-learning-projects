@@ -88,8 +88,9 @@ function MovieOverView() {
       // style={{ display: "grid", gridTemplateRows: "auto 1fr" }}
       className="movie-overview"
     >
-      <MovieDetails />
-      <MovieReview />
+      <MovieStatistics />
+      {/* <MovieDetails /> */}
+      {/* <MovieReview /> */}
     </div>
   );
 }
@@ -177,6 +178,20 @@ function Star() {
         }`}
       ></i>
     </li>
+  );
+}
+
+function MovieStatistics() {
+  return (
+    <div className="movie-statistics">
+      <h2 className="movie-statistics__title">MOVIES YOU WATCHED</h2>
+      <ul className="movie-statistics__list">
+        <li className="movie-statistics__item">🎅🏻 2 movies</li>
+        <li className="movie-statistics__item">🌟 8.65</li>
+        <li className="movie-statistics__item">⭐ 9.5</li>
+        <li className="movie-statistics__item">⏳ 142 min</li>
+      </ul>
+    </div>
   );
 }
 

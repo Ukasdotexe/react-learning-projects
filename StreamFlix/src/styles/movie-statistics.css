@@ -1,0 +1,25 @@
+.movie-statistics {
+  background-color: var(--color-background-100);
+  padding: 2rem;
+  border-radius: var(--base-border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.movie-statistics__title {
+  color: #fff;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.movie-statistics__list {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+}
+
+.movie-statistics__item {
+  font-size: 1.8rem;
+  font-weight: 500;
+
+  color: #fff;
+}
