@@ -89,6 +89,7 @@ function MovieOverView() {
       className="movie-overview"
     >
       <MovieStatistics />
+      <WatchedMovie />
       {/* <MovieDetails /> */}
       {/* <MovieReview /> */}
     </div>
@@ -191,6 +192,27 @@ function MovieStatistics() {
         <li className="movie-statistics__item">⭐ 9.5</li>
         <li className="movie-statistics__item">⏳ 142 min</li>
       </ul>
+    </div>
+  );
+}
+
+function WatchedMovie() {
+  return (
+    <div className="watched-movie">
+      <img
+        className="watched-movie-img"
+        src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
+        alt="movie"
+      />
+      <div>
+        <h2 className="watched-movie-title">Inception </h2>
+        <ul className="watched-movie-stats">
+          <li>🌟 8.65</li>
+          <li>⭐ 9.5</li>
+          <li>⏳ 142 min</li>
+        </ul>
+      </div>
+      <span className="delete-icon">❌</span>
     </div>
   );
 }
