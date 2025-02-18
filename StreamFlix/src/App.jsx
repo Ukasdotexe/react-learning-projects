@@ -22,6 +22,55 @@ const tempMovieData = [
     Poster:
       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
+  {
+    imdbID: "tt0848228",
+    Title: "The Avengers",
+    Year: "2012",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMTk1MjgyOTkzNF5BMl5BanBnXkFtZTcwMjgzMDgwOA@@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt1825683",
+    Title: "The Dark Knight Rises",
+    Year: "2012",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMTYzODI5NTg3Ml5BMl5BanBnXkFtZTcwNjgwNTc2OA@@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt6751668",
+    Title: "Parasite",
+    Year: "2019",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0109830",
+    Title: "Forrest Gump",
+    Year: "1994",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BODU5ZTRjY2QtNzA3Ni00Yjk0LTg1MGItYmFkZTQwZGM0OWFlXkEyXkFqcGdeQXVyMTYwNjQ1NjM@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0816692",
+    Title: "Interstellar",
+    Year: "2014",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMTYxNjk3NzgzM15BMl5BanBnXkFtZTgwNTI1ODcyMjE@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0783233",
+    Title: "The Hunger Games",
+    Year: "2012",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMTY2MTg0MTgyNV5BMl5BanBnXkFtZTcwMzEwODQ3OA@@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0082971",
+    Title: "Star Wars: Episode V - The Empire Strikes Back",
+    Year: "1980",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjA4MTE5NjA3OF5BMl5BanBnXkFtZTcwNzA5MDM5OQ@@._V1_SX300.jpg",
+  },
 ];
 
 const tempWatchedData = [
@@ -51,7 +100,7 @@ function App() {
   return (
     <>
       <div className="container">
-        <Header />
+        <NavBar />
         <MoviesList />
         <MovieOverView />
       </div>
@@ -59,15 +108,44 @@ function App() {
   );
 }
 
-function Header() {
+function NavBar() {
   return (
-    <header className="header">
-      <h1>🎬 StreamFlix</h1>
-      <input placeholder="Search movies..." type="text" />
-      <span>
-        Found <strong>0</strong> results
-      </span>
-    </header>
+    <nav className="header">
+      <Logo />
+      <Search />
+      <NumResults />
+    </nav>
+  );
+}
+
+function Logo() {
+  return (
+    <div className="logo">
+      <span role="img">🎬</span>
+      <h1> StreamFlix</h1>
+    </div>
+  );
+}
+
+function Search() {
+  const [query, setQuery] = useState("");
+
+  return (
+    <input
+      className="search"
+      type="text"
+      placeholder="Search movies..."
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+  );
+}
+
+function NumResults() {
+  return (
+    <p className="num-results">
+      Found <strong>X</strong> results
+    </p>
   );
 }
 
@@ -82,20 +160,6 @@ function MoviesList() {
   );
 }
 
-function MovieOverView() {
-  return (
-    <div
-      // style={{ display: "grid", gridTemplateRows: "auto 1fr" }}
-      className="movie-overview"
-    >
-      <MovieStatistics />
-      <WatchedMovie />
-      {/* <MovieDetails /> */}
-      {/* <MovieReview /> */}
-    </div>
-  );
-}
-
 function MovieCard({ movie }) {
   return (
     <div className="movie">
@@ -104,6 +168,17 @@ function MovieCard({ movie }) {
         <span className="movie__name">{movie.Title}</span>
         <span className="movie__year">📅 {movie.Year}</span>
       </div>
+    </div>
+  );
+}
+
+function MovieOverView() {
+  return (
+    <div className="movie-overview">
+      <MovieStatistics />
+      <WatchedMovie />
+      {/* <MovieDetails /> */}
+      {/* <MovieReview /> */}
     </div>
   );
 }
@@ -137,6 +212,14 @@ function MovieReview() {
   return (
     <div className="review">
       <Rating />
+      <MovieInfo />
+    </div>
+  );
+}
+
+function MovieInfo() {
+  return (
+    <>
       <p className="story">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita nobis
         aliquam itaque repellendus voluptas eligendi consequatur? Quam
@@ -148,7 +231,7 @@ function MovieReview() {
         Starring Leonardo DiCaprio,Joseph Gordon-Levitt,Elliot Page
       </p>
       <p className="directed-by">Directed by Christopher Nolan</p>
-    </div>
+    </>
   );
 }
 
