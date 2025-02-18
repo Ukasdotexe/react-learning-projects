@@ -22,55 +22,6 @@ const tempMovieData = [
     Poster:
       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
-  {
-    imdbID: "tt0848228",
-    Title: "The Avengers",
-    Year: "2012",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMTk1MjgyOTkzNF5BMl5BanBnXkFtZTcwMjgzMDgwOA@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt1825683",
-    Title: "The Dark Knight Rises",
-    Year: "2012",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMTYzODI5NTg3Ml5BMl5BanBnXkFtZTcwNjgwNTc2OA@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0109830",
-    Title: "Forrest Gump",
-    Year: "1994",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BODU5ZTRjY2QtNzA3Ni00Yjk0LTg1MGItYmFkZTQwZGM0OWFlXkEyXkFqcGdeQXVyMTYwNjQ1NjM@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0816692",
-    Title: "Interstellar",
-    Year: "2014",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMTYxNjk3NzgzM15BMl5BanBnXkFtZTgwNTI1ODcyMjE@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0783233",
-    Title: "The Hunger Games",
-    Year: "2012",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMTY2MTg0MTgyNV5BMl5BanBnXkFtZTcwMzEwODQ3OA@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0082971",
-    Title: "Star Wars: Episode V - The Empire Strikes Back",
-    Year: "1980",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjA4MTE5NjA3OF5BMl5BanBnXkFtZTcwNzA5MDM5OQ@@._V1_SX300.jpg",
-  },
 ];
 
 const tempWatchedData = [
@@ -101,8 +52,7 @@ function App() {
     <>
       <div className="container">
         <NavBar />
-        <MoviesList />
-        <MovieOverView />
+        <Main />
       </div>
     </>
   );
@@ -110,7 +60,7 @@ function App() {
 
 function NavBar() {
   return (
-    <nav className="header">
+    <nav className="nav">
       <Logo />
       <Search />
       <NumResults />
@@ -118,6 +68,14 @@ function NavBar() {
   );
 }
 
+function Main() {
+  return (
+    <>
+      <MoviesList />
+      <MovieOverView movie={tempWatchedData[0]} />
+    </>
+  );
+}
 function Logo() {
   return (
     <div className="logo">
@@ -150,13 +108,17 @@ function NumResults() {
 }
 
 function MoviesList() {
+  const [movies, setMovies] = useState(tempMovieData);
   return (
-    <ul className="movies-list">
-      {tempMovieData.map((movie) => {
-        return <MovieCard key={movie.imdbID} movie={movie} />;
-      })}
+    <div className="movies-list">
+      {<span className="circle">-</span>}
+      <ul>
+        {movies.map((movie) => {
+          return <MovieCard key={movie.imdbID} movie={movie} />;
+        })}
+      </ul>
       <span className="circle">-</span>
-    </ul>
+    </div>
   );
 }
 
@@ -172,18 +134,20 @@ function MovieCard({ movie }) {
   );
 }
 
-function MovieOverView() {
+function MovieOverView({ movie }) {
+  const [watched, setWatched] = useState(tempWatchedData);
   return (
     <div className="movie-overview">
-      <MovieStatistics />
-      <WatchedMovie />
-      {/* <MovieDetails /> */}
+      <MovieStatistics watched={watched} />
+      <WatchedMovie movie={movie} />
+      {/* <MovieDetails movie={null} /> */}
       {/* <MovieReview /> */}
+      <span className="circle">-</span>
     </div>
   );
 }
 
-function MovieDetails() {
+function MovieDetails({ movie }) {
   const imageLink =
     "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg";
 
@@ -202,7 +166,6 @@ function MovieDetails() {
           <span>8.8 IMDb rating</span>
         </div>
       </div>
-      <span className="circle">-</span>
       <span className="back">&#8592;</span>
     </div>
   );
@@ -265,34 +228,45 @@ function Star() {
   );
 }
 
-function MovieStatistics() {
+function MovieStatistics({ watched }) {
+  function average(arr) {
+    return arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+  }
+
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
+
   return (
     <div className="movie-statistics">
       <h2 className="movie-statistics__title">MOVIES YOU WATCHED</h2>
       <ul className="movie-statistics__list">
-        <li className="movie-statistics__item">🎅🏻 2 movies</li>
-        <li className="movie-statistics__item">🌟 8.65</li>
-        <li className="movie-statistics__item">⭐ 9.5</li>
-        <li className="movie-statistics__item">⏳ 142 min</li>
+        <li className="movie-statistics__item">🎅🏻 {watched.length} movies</li>
+        <li className="movie-statistics__item">🌟 {avgImdbRating}</li>
+        <li className="movie-statistics__item">⭐ {avgUserRating}</li>
+        <li className="movie-statistics__item">⏳ {avgRuntime} min</li>
       </ul>
     </div>
   );
 }
 
-function WatchedMovie() {
+function WatchedMovie({ movie }) {
+  const { Title, runtime, imdbRating, userRating, Poster } = movie;
+
   return (
     <div className="watched-movie">
       <img
         className="watched-movie-img"
-        src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
-        alt="movie"
+        src={Poster}
+        // src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
+        alt={`${Title} Poster`}
       />
       <div>
-        <h2 className="watched-movie-title">Inception </h2>
+        <h2 className="watched-movie-title">{Title}</h2>
         <ul className="watched-movie-stats">
-          <li>🌟 8.65</li>
-          <li>⭐ 9.5</li>
-          <li>⏳ 142 min</li>
+          <li>🌟 {imdbRating}</li>
+          <li>⭐ {userRating}</li>
+          <li>⏳ {runtime} min</li>
         </ul>
       </div>
       <span className="delete-icon">❌</span>

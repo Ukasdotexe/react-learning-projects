@@ -1,5 +1,5 @@
-.header {
-  grid-column: span 2;
+.nav {
+  grid-column: 1/-1;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
@@ -8,11 +8,14 @@
   background-color: var(--color-primary);
 }
 
-.header h1 {
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   font-size: 2.4rem;
 }
 
-.header input {
+.nav input {
   width: 70%;
   justify-self: center;
   font-size: 1.6rem;
@@ -22,18 +25,19 @@
   border-radius: var(--base-border-radius);
   color: var(--color-text);
 }
-.header input::placeholder {
+
+.nav input::placeholder {
   color: var(--color-text-dark);
 }
 
-.header input:focus {
+.nav input:focus {
   outline: none;
   transform: translateY(-3px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.header span {
+.nav .num-results {
   justify-self: right;
   font-size: 1.8rem;
 }
