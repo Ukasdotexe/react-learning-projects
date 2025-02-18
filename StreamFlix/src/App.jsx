@@ -55,34 +55,37 @@ const tempWatchedData = [
 
 function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
-    <>
-      <div className="container">
-        <NavBar length={movies.length} />
-        <Main movies={movies} />
-      </div>
-    </>
+    <div className="container">
+      <NavBar>
+        <Logo />
+        <Search />
+        <NumResults length={movies.length} />
+      </NavBar>
+
+      <Main>
+        <Box className="movies-list">
+          <MoviesList movies={movies} />
+        </Box>
+        <Box className="movie-overview">
+          {/* <MovieDetails /> */}
+          {/* <MovieReview /> */}
+          <MovieStatistics watched={watched} />
+          <WatchedMovie movie={watched[0]} />
+        </Box>
+      </Main>
+    </div>
   );
 }
 
-function NavBar({ length }) {
-  return (
-    <nav className="nav">
-      <Logo />
-      <Search />
-      <NumResults length={length} />
-    </nav>
-  );
+function NavBar({ children }) {
+  return <nav className="nav">{children}</nav>;
 }
 
-function Main({ movies }) {
-  return (
-    <>
-      <MoviesList movies={movies} />
-      <MovieOverView movie={tempWatchedData[0]} />
-    </>
-  );
+function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
 function Logo() {
@@ -116,56 +119,39 @@ function NumResults({ length }) {
   );
 }
 
-function MoviesList({ movies }) {
+function Box({ className, children }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="movies-list">
-      {isOpen && (
-        <ul>
-          {movies.map((movie) => {
-            return <MovieCard key={movie.imdbID} movie={movie} />;
-          })}
-        </ul>
-      )}
+    <div className={className}>
       <span onClick={() => setIsOpen((open) => !open)} className="circle">
         {isOpen ? "-" : "+"}
       </span>
+
+      {isOpen && children}
     </div>
+  );
+}
+
+function MoviesList({ movies }) {
+  return (
+    <ul>
+      {movies.map((movie) => (
+        <MovieCard key={movie.imdbID} movie={movie} />
+      ))}
+    </ul>
   );
 }
 
 function MovieCard({ movie }) {
   return (
-    <div className="movie">
+    <li className="movie">
       <img src={movie.Poster} />
       <div className="movie__info">
         <span className="movie__name">{movie.Title}</span>
         <span className="movie__year">📅 {movie.Year}</span>
       </div>
-    </div>
-  );
-}
-
-function MovieOverView({ movie }) {
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen, setIsOpen] = useState(true);
-  return (
-    <div className="movie-overview">
-      {isOpen && (
-        <>
-          <MovieStatistics watched={watched} />
-          <WatchedMovie movie={movie} />
-        </>
-      )}
-
-      {/* <MovieDetails movie={null} /> */}
-      {/* <MovieReview /> */}
-
-      <span onClick={() => setIsOpen((open) => !open)} className="circle">
-        {isOpen ? "-" : "+"}
-      </span>
-    </div>
+    </li>
   );
 }
 
