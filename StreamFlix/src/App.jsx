@@ -1,3 +1,6 @@
+//
+//
+
 import { useState } from "react";
 
 const tempMovieData = [
@@ -8,6 +11,7 @@ const tempMovieData = [
     Poster:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
   },
+
   {
     imdbID: "tt0133093",
     Title: "The Matrix",
@@ -15,6 +19,7 @@ const tempMovieData = [
     Poster:
       "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
   },
+
   {
     imdbID: "tt6751668",
     Title: "Parasite",
@@ -35,6 +40,7 @@ const tempWatchedData = [
     imdbRating: 8.8,
     userRating: 10,
   },
+
   {
     imdbID: "tt0088763",
     Title: "Back to the Future",
@@ -48,34 +54,37 @@ const tempWatchedData = [
 ];
 
 function App() {
+  const [movies, setMovies] = useState(tempMovieData);
+
   return (
     <>
       <div className="container">
-        <NavBar />
-        <Main />
+        <NavBar length={movies.length} />
+        <Main movies={movies} />
       </div>
     </>
   );
 }
 
-function NavBar() {
+function NavBar({ length }) {
   return (
     <nav className="nav">
       <Logo />
       <Search />
-      <NumResults />
+      <NumResults length={length} />
     </nav>
   );
 }
 
-function Main() {
+function Main({ movies }) {
   return (
     <>
-      <MoviesList />
+      <MoviesList movies={movies} />
       <MovieOverView movie={tempWatchedData[0]} />
     </>
   );
 }
+
 function Logo() {
   return (
     <div className="logo">
@@ -99,25 +108,29 @@ function Search() {
   );
 }
 
-function NumResults() {
+function NumResults({ length }) {
   return (
     <p className="num-results">
-      Found <strong>X</strong> results
+      Found <strong>{length}</strong> results
     </p>
   );
 }
 
-function MoviesList() {
-  const [movies, setMovies] = useState(tempMovieData);
+function MoviesList({ movies }) {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <div className="movies-list">
-      {<span className="circle">-</span>}
-      <ul>
-        {movies.map((movie) => {
-          return <MovieCard key={movie.imdbID} movie={movie} />;
-        })}
-      </ul>
-      <span className="circle">-</span>
+      {isOpen && (
+        <ul>
+          {movies.map((movie) => {
+            return <MovieCard key={movie.imdbID} movie={movie} />;
+          })}
+        </ul>
+      )}
+      <span onClick={() => setIsOpen((open) => !open)} className="circle">
+        {isOpen ? "-" : "+"}
+      </span>
     </div>
   );
 }
@@ -136,13 +149,22 @@ function MovieCard({ movie }) {
 
 function MovieOverView({ movie }) {
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="movie-overview">
-      <MovieStatistics watched={watched} />
-      <WatchedMovie movie={movie} />
+      {isOpen && (
+        <>
+          <MovieStatistics watched={watched} />
+          <WatchedMovie movie={movie} />
+        </>
+      )}
+
       {/* <MovieDetails movie={null} /> */}
       {/* <MovieReview /> */}
-      <span className="circle">-</span>
+
+      <span onClick={() => setIsOpen((open) => !open)} className="circle">
+        {isOpen ? "-" : "+"}
+      </span>
     </div>
   );
 }
