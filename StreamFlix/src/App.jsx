@@ -1,7 +1,8 @@
 //
 //
 
-import { useState } from "react";
+import { func } from "prop-types";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -53,27 +54,92 @@ const tempWatchedData = [
   },
 ];
 
+function Loader({ children }) {
+  return <p className="loader">{children}</p>;
+}
+
+function ErroMessage({ children }) {
+  return (
+    <p className="error">
+      <span>🥺</span> {children}
+    </p>
+  );
+}
+
+const KEY = "dde9de99";
+
 function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (query.length <= 3) {
+      setMovies([]);
+      // setError("");
+      return;
+    }
+
+    const fetchMovies = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        const res = await fetch(
+          `https://www.omdbapi.com/?s=${query}&apikey=${KEY}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch movies!");
+        }
+
+        const data = await res.json();
+
+        if (data.Response === "False") {
+          throw new Error("No movies found!");
+        }
+
+        setMovies(data.Search);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMovies();
+  }, [query]);
+
+  function handleSetQuery(value) {
+    setQuery(value);
+  }
 
   return (
     <div className="container">
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} onSetQuery={handleSetQuery} />
         <NumResults length={movies.length} />
       </NavBar>
 
       <Main>
         <Box className="movies-list">
-          <MoviesList movies={movies} />
+          {isLoading && <Loader>Loading...</Loader>}
+          {!error && !isLoading && <MoviesList movies={movies} />}
+          {error && <ErroMessage>{error}</ErroMessage>}
         </Box>
         <Box className="movie-overview">
-          {/* <MovieDetails /> */}
+          <MovieDetails />
+          <MovieReview>
+            <Rating />
+            <MovieInfo />
+          </MovieReview>
           {/* <MovieReview /> */}
-          <MovieStatistics watched={watched} />
-          <WatchedMovie movie={watched[0]} />
+          {/* <MovieStatistics watched={watched} />
+          <WatchedMovie movie={watched[0]} /> */}
         </Box>
       </Main>
     </div>
@@ -97,16 +163,18 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
-
+function Search({ query, onSetQuery }) {
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
+      onChange={(event) => {
+        if (query === event.target.value) return;
+
+        onSetQuery(event.target.value);
+      }}
+      // onChange={(e) => onSetQuery(e.target.value)}
     />
   );
 }
@@ -179,13 +247,8 @@ function MovieDetails({ movie }) {
   );
 }
 
-function MovieReview() {
-  return (
-    <div className="review">
-      <Rating />
-      <MovieInfo />
-    </div>
-  );
+function MovieReview({ children }) {
+  return <div className="review">{children}</div>;
 }
 
 function MovieInfo() {
@@ -207,29 +270,49 @@ function MovieInfo() {
 }
 
 function Rating() {
+  const [selectedStars, setSelectedStars] = useState(0);
+  const [isClicked, setIsClicked] = useState(false);
+
+  function handleSelectedStars(num) {
+    setIsClicked(false);
+    setSelectedStars(num);
+  }
+
+  function handleStarClick() {
+    setIsClicked(true);
+  }
+
   return (
     <div className="rating">
-      <ul className="stars">
-        {Array.from({ length: 10 }, (_, i) => i).map((el) => (
-          <Star />
+      <ul
+        className="stars"
+        onMouseLeave={() => !isClicked && setSelectedStars(0)}
+      >
+        {Array.from({ length: 10 }, (_, i) => (
+          <Star
+            key={i + 1}
+            id={i + 1}
+            selectedStars={selectedStars}
+            onHover={handleSelectedStars}
+            onClick={handleStarClick}
+          />
         ))}
       </ul>
-      <span className="rate"> 10</span>
-      <div className="btn-add-to-list">+ Add to list</div>
+
+      <span className="rate"> {selectedStars}</span>
+      {isClicked && <div className="btn-add-to-list">+ Add to list</div>}
     </div>
   );
 }
 
-function Star() {
-  const [hovered, setHovered] = useState(false);
+function Star({ id, selectedStars, onHover, onClick }) {
+  const isSelected = id <= selectedStars;
 
   return (
-    <li>
+    <li onMouseEnter={() => onMouseHover(id)} onClick={onClick}>
       <i
-        onMouseEnter={() => setHovered((is) => !is)}
-        // onMouseLeave={() => setHovered(false)}
         className={`fa fa-star star-icon large-star ${
-          !hovered ? "fa-star-o" : ""
+          !isSelected ? "fa-star-o" : ""
         }`}
       ></i>
     </li>

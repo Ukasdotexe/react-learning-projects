@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+src/App copy.jsx
+src/StarRating.jsx
+src/StarRating.jsx
+src/TextExpander.jsx
