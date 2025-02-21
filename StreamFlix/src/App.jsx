@@ -90,6 +90,8 @@ function App() {
     }
   }
 
+  useEffect(() => {}, [selectedId]);
+
   function handleSelectedMovie(movieId) {
     setSelectedId((previousId) => (previousId === movieId ? null : movieId));
   }
@@ -122,9 +124,10 @@ function App() {
   useEffect(() => {
     if (query.length <= 3) {
       setMovies([]);
-      // setError("");
       return;
     }
+
+    const controller = new AbortController();
 
     const fetchMovies = async () => {
       try {
@@ -132,29 +135,26 @@ function App() {
         setError("");
 
         const res = await fetch(
-          `https://www.omdbapi.com/?s=${query}&apikey=${KEY}`
+          `https://www.omdbapi.com/?s=${query}&apikey=${KEY}`,
+          { signal: controller.signal }
         );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch movies!");
-        }
+        if (!res.ok) throw new Error("Failed to fetch movies!");
 
         const data = await res.json();
-
-        if (data.Response === "False") {
-          throw new Error("No movies found!");
-        }
+        if (data.Response === "False") throw new Error("No movies found!");
 
         setMovies(data.Search);
       } catch (error) {
-        console.log(error);
-        setError(error.message);
+        error.name !== "AbortError" && setError(error.message);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchMovies();
+
+    return () => controller.abort();
   }, [query]);
 
   function handleSetQuery(value) {
@@ -318,7 +318,6 @@ function MovieDetails({ selectedId, onBack, onAddWatchedMovie, watched }) {
       } catch (error) {
         setError(error.message);
       } finally {
-        console.log("loading is off");
         setIsLoading(false);
       }
     }
@@ -327,6 +326,12 @@ function MovieDetails({ selectedId, onBack, onAddWatchedMovie, watched }) {
       getMovieDetailsById(selectedId);
     }
   }, [selectedId]); // Runs when `selectedId` changes
+
+  useEffect(() => {
+    document.title = movie.Title;
+
+    return () => (document.title = "Stream Flix");
+  }, [movie]);
 
   function handlerUserRating(numStars) {
     function handleNA(value, fallbackValue = 0) {
@@ -351,7 +356,6 @@ function MovieDetails({ selectedId, onBack, onAddWatchedMovie, watched }) {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="movie-details">
