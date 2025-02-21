@@ -76,20 +76,6 @@ function App() {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  async function getMovieDetailsById(id) {
-    try {
-      const res = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${KEY}`);
-
-      if (!res.ok) throw new Error("Something went wrong !");
-
-      const movieDetails = await res.json();
-
-      if (movieDetails) return movieDetails;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
   useEffect(() => {}, [selectedId]);
 
   function handleSelectedMovie(movieId) {
@@ -165,7 +151,11 @@ function App() {
     <div className="container">
       <NavBar>
         <Logo />
-        <Search query={query} onSetQuery={handleSetQuery} />
+        <Search
+          query={query}
+          onSetQuery={handleSetQuery}
+          onBack={() => setSelectedId(null)}
+        />
         <NumResults length={movies.length} />
       </NavBar>
 
@@ -223,13 +213,14 @@ function Logo() {
   );
 }
 
-function Search({ query, onSetQuery }) {
+function Search({ query, onSetQuery, onBack }) {
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
       onChange={(event) => {
+        onBack();
         if (query === event.target.value) return;
 
         onSetQuery(event.target.value);
@@ -296,6 +287,14 @@ function MovieDetails({ selectedId, onBack, onAddWatchedMovie, watched }) {
 
   const userRating =
     isWatched && watched.find((w) => w.imdbID === selectedId).userRating;
+
+  useEffect(() => {
+    const handler = (e) => e.code === "Escape" && onBack();
+
+    document.addEventListener("keydown", handler);
+
+    return () => document.removeEventListener("keydown", handler);
+  }, [onBack]);
 
   useEffect(() => {
     async function getMovieDetailsById(id) {
