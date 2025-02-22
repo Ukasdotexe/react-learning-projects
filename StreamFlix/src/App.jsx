@@ -2,7 +2,7 @@
 //
 
 import { func } from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const tempMovieData = [
   {
@@ -68,15 +68,23 @@ function ErroMessage({ children }) {
 
 const KEY = "dde9de99";
 
+function useGetWatchedMovies() {}
+
 function App() {
+  const [watched, setWatched] = useState(() => {
+    const storedWatchedList = localStorage.getItem("watchedList");
+
+    return storedWatchedList ? JSON.parse(storedWatchedList) : [];
+  });
+
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState();
 
-  useEffect(() => {}, [selectedId]);
+  // useEffect(() => {}, [selectedId]);
 
   function handleSelectedMovie(movieId) {
     setSelectedId((previousId) => (previousId === movieId ? null : movieId));
@@ -106,6 +114,10 @@ function App() {
       );
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem("watchedList", JSON.stringify(watched));
+  }, [watched]);
 
   useEffect(() => {
     if (query.length <= 3) {
@@ -214,8 +226,27 @@ function Logo() {
 }
 
 function Search({ query, onSetQuery, onBack }) {
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    inputEl.current.focus();
+
+    function handler(e) {
+      if (e.code === "Enter") {
+        onSetQuery("");
+        inputEl.current.value = "";
+        inputEl.current.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handler);
+
+    return () => document.removeEventListener("keydown", handler);
+  }, [onSetQuery]);
+
   return (
     <input
+      ref={inputEl}
       className="search"
       type="text"
       placeholder="Search movies..."
