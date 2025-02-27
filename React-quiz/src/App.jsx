@@ -1,13 +1,33 @@
 import { useState } from "react";
+import quizData from "./questions.json";
+
 function App() {
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
+
+  const [questions, setQuestions] = useState(() => {
+    const { questions: data } = quizData;
+    return data;
+  });
+
   return (
     <div className="app">
       <Header />
+
       <Main>
-        <StartQuiz />
-        <QuizProgress />
-        <QuizOptions />
-        <Timer />
+        {!isQuizStarted && (
+          <StartQuiz
+            questions={questions}
+            setIsQuizStarted={setIsQuizStarted}
+          />
+        )}
+
+        {isQuizStarted && (
+          <>
+            <QuizProgress />
+            <QuizQuestions questions={questions} />
+            <Timer />
+          </>
+        )}
       </Main>
     </div>
   );
@@ -26,12 +46,14 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function StartQuiz() {
+function StartQuiz({ questions, setIsQuizStarted }) {
   return (
     <div className="start">
       <h2>Welcome to The React Quiz</h2>
-      <h3>X questions to test your React mastery</h3>
-      <button className="btn">Let's Start</button>
+      <h3>{questions.length} questions to test your React mastery</h3>
+      <button onClick={() => setIsQuizStarted((is) => !is)} className="btn">
+        Let's Start
+      </button>
     </div>
   );
 }
@@ -46,34 +68,49 @@ function QuizProgress() {
   );
 }
 
-function QuizOptions() {
+function QuizQuestions({ questions }) {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const question = questions[currentQuestion];
+
   return (
     <>
-      <h4>What is the most popular Javascript FrameWork ? </h4>
+      <h4>{question.question}</h4>
       <ul className="options">
-        <li>
-          <button className="btn btn-option">Angular</button>
-        </li>
-        <li>
-          <button className="btn btn-option">React</button>
-        </li>
-        <li>
-          <button className="btn btn-option">Vue</button>
-        </li>
-        <li>
-          <button className="btn btn-option">Angular</button>
-        </li>
+        {question.options.map((option, i) => (
+          <li key={i + 1}>
+            <button
+              className={`btn btn-option ${
+                selectedOption !== null && // Check if an option has been selected
+                (i === question.correctOption ? "correct" : "wrong")
+              } ${selectedOption === i ? "answer" : ""}`}
+              onClick={() => setSelectedOption(i)}
+              disabled={selectedOption !== null}
+            >
+              {option}
+            </button>
+          </li>
+        ))}
       </ul>
+
+      {selectedOption != null && (
+        <button
+          className="btn btn-ui"
+          onClick={() => {
+            setCurrentQuestion((cur) => ++cur);
+            setSelectedOption(null);
+          }}
+        >
+          Next
+        </button>
+      )}
     </>
   );
 }
 
 function Timer() {
-  return (
-    <div style={{ textAlign: "left" }}>
-      <button className="btn ">07:50</button>
-    </div>
-  );
+  return <button className="btn">07:50</button>;
 }
 
 export default App;
