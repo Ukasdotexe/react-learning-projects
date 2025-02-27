@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import quizData from "./questions.json";
 
 function App() {
@@ -8,6 +8,10 @@ function App() {
     const { questions: data } = quizData;
     return data;
   });
+
+  function handleTimeUp() {
+    alert("message is running !");
+  }
 
   return (
     <div className="app">
@@ -25,7 +29,7 @@ function App() {
           <>
             <QuizProgress />
             <QuizQuestions questions={questions} />
-            <Timer />
+            <Timer onTimeUp={handleTimeUp} />
           </>
         )}
       </Main>
@@ -109,8 +113,31 @@ function QuizQuestions({ questions }) {
   );
 }
 
-function Timer() {
-  return <button className="btn">07:50</button>;
+function Timer(onTimeUp) {
+  const [timeleft, setTimeLeft] = useState(450);
+
+  function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
+
+  useEffect(
+    function () {
+      if (timeleft <= 0) {
+        onTimeUp();
+        return;
+      }
+
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => --prev);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    },
+    [timeleft]
+  );
+  return <button className="btn">{formatTime(timeleft)}</button>;
 }
 
 export default App;
