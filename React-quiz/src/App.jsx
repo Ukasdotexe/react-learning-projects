@@ -3,14 +3,16 @@ import quizData from "./questions.json";
 
 function App() {
   const [isQuizStarted, setIsQuizStarted] = useState(false);
-
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentPoints, setCurrentPoints] = useState(0);
+  const [timeIsUp, setTimeIsUp] = useState(false);
   const [questions, setQuestions] = useState(() => {
     const { questions: data } = quizData;
     return data;
   });
 
   function handleTimeUp() {
-    alert("message is running !");
+    setTimeIsUp(true);
   }
 
   return (
@@ -27,11 +29,39 @@ function App() {
 
         {isQuizStarted && (
           <>
-            <QuizProgress />
-            <QuizQuestions questions={questions} />
-            <Timer onTimeUp={handleTimeUp} />
+            <QuizProgress
+              currentQuestion={currentQuestion}
+              totalQuestions={questions.length}
+              currentPoints={currentPoints}
+            />
+            {currentQuestion !== questions.length - 1 && !timeIsUp && (
+              <>
+                <QuizQuestions
+                  questions={questions}
+                  currentQuestion={currentQuestion}
+                  setCurrentQuestion={setCurrentQuestion}
+                  setCurrentPoints={setCurrentPoints}
+                />
+                <Timer onTimeUp={handleTimeUp} />
+              </>
+            )}
           </>
         )}
+
+        {currentQuestion === questions.length - 1 ||
+          (timeIsUp && (
+            <button
+              className="btn"
+              onClick={() => {
+                setIsQuizStarted(false);
+                setCurrentQuestion(0);
+                setCurrentPoints(0);
+                setTimeIsUp(false);
+              }}
+            >
+              Play Again
+            </button>
+          ))}
       </Main>
     </div>
   );
@@ -62,18 +92,26 @@ function StartQuiz({ questions, setIsQuizStarted }) {
   );
 }
 
-function QuizProgress() {
+function QuizProgress({ currentQuestion, totalQuestions, currentPoints }) {
+  const questionNumber = currentQuestion + 1;
+
   return (
     <div className="progress">
-      <progress value="0" max="280"></progress>
-      <span>Question 5/12</span>
-      <span>0/ 280 points</span>
+      <progress value={currentPoints} max="280"></progress>
+      <span>
+        Question {questionNumber}/{totalQuestions}
+      </span>
+      <span>{currentPoints}/ 280 points</span>
     </div>
   );
 }
 
-function QuizQuestions({ questions }) {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+function QuizQuestions({
+  questions,
+  currentQuestion,
+  setCurrentQuestion,
+  setCurrentPoints,
+}) {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const question = questions[currentQuestion];
@@ -86,11 +124,18 @@ function QuizQuestions({ questions }) {
           <li key={i + 1}>
             <button
               className={`btn btn-option ${
-                selectedOption !== null && // Check if an option has been selected
+                selectedOption !== null &&
                 (i === question.correctOption ? "correct" : "wrong")
               } ${selectedOption === i ? "answer" : ""}`}
-              onClick={() => setSelectedOption(i)}
               disabled={selectedOption !== null}
+              onClick={() => {
+                setSelectedOption(i);
+                if (i === question.correctOption) {
+                  setCurrentPoints(
+                    (prevPoints) => prevPoints + question.points
+                  );
+                }
+              }}
             >
               {option}
             </button>
@@ -113,8 +158,8 @@ function QuizQuestions({ questions }) {
   );
 }
 
-function Timer(onTimeUp) {
-  const [timeleft, setTimeLeft] = useState(450);
+function Timer({ onTimeUp }) {
+  const [timeleft, setTimeLeft] = useState(10);
 
   function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
