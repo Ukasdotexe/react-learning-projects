@@ -1,0 +1,56 @@
+/* Nav.module.css */
+
+.nav {
+  background-color: #333;
+  padding: 1rem 2rem;
+}
+
+.navList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  margin: 0 15px;
+  position: relative;
+}
+
+.navLink {
+  text-decoration: none;
+  color: white;
+  font-size: 1.8rem;
+  padding: 0.8rem 1.2rem;
+  transition: color 0.3s ease-in-out;
+}
+
+/* Active Page Styling */
+.active {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+/* Underline Effect for Hover and Active Page */
+.navLink::after {
+  content: "";
+  display: block;
+  height: 2px;
+  width: 0;
+  background-color: #ffcc00;
+  transition: width 0.3s ease-in-out;
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navLink:hover::after,
+.active::after {
+  width: 100%;
+}
+
+:global(.test) {
+  background-color: red;
+}
