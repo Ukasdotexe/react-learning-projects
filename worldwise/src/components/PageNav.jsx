@@ -5,7 +5,7 @@
 //
 
 import { NavLink } from "react-router-dom";
-import styles from "./PageNav.module.css";
+import styles from "../Styles/PageNav.module.css";
 
 export default function Navbar() {
   const { nav, navList, navItem, navLink, active } = styles;
@@ -49,3 +49,6 @@ export default function Navbar() {
     </>
   );
 }
+
+// let's say we have a app navigation , do we need always to include it
+// in all page components ?
