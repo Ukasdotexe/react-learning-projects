@@ -1,8 +1,9 @@
 import styles from "../styles/product.module.css";
-
+import PageNav from "../components/PageNav";
 function Product() {
   return (
     <main className={styles.product}>
+      <PageNav />
       <section>
         <img src="img-1.jpg" alt="overview of a large city with skyscrapers" />
         <div>
