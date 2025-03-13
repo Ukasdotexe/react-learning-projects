@@ -6,7 +6,6 @@
 
 import { NavLink } from "react-router-dom";
 import styles from "../Styles/PageNav.module.css";
-import btnStyles from "../Styles/Button.module.css";
 import Logo from "./Logo";
 
 export default function Navbar() {
@@ -22,10 +21,7 @@ export default function Navbar() {
             <NavLink to="/product">Product</NavLink>
           </li>
           <li>
-            <NavLink
-              to="/login"
-              className={`${btnStyles.btn} ${btnStyles.primary} `}
-            >
+            <NavLink to="/login" className={styles.ctaLink}>
               Login
             </NavLink>
           </li>
