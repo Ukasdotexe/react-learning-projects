@@ -1,13 +1,24 @@
-//
-//
-//
-import PageNav from "../components/PageNav";
+import styles from "../styles/product.module.css";
+
 function Product() {
   return (
-    <div>
-      <PageNav />
-      <h1>Product</h1>
-    </div>
+    <main className={styles.product}>
+      <section>
+        <img src="img-1.jpg" alt="overview of a large city with skyscrapers" />
+        <div>
+          <h2>
+            Simple pricing.
+            <br />
+            Just $9/month.
+          </h2>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vel
+            labore mollitia iusto. Recusandae quos provident, laboriosam fugit
+            voluptatem iste.
+          </p>
+        </div>
+      </section>
+    </main>
   );
 }
 
