@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import styles from "../styles/homePage.module.css";
-import PageNav from "../components/PageNav";
+import styles from "./homePage.module.css";
+import PageNav from "../../components/PageNavbar/PageNav.jsx";
 function Home() {
   return (
     <main className={styles.homepage}>

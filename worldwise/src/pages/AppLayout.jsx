@@ -1,4 +1,4 @@
-import AppNav from "../components/AppNav";
+import AppNav from "../components/AppNavbar/AppNav.jsx";
 
 function AppLayout() {
   return (
