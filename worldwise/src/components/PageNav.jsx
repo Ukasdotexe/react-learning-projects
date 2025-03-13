@@ -6,42 +6,27 @@
 
 import { NavLink } from "react-router-dom";
 import styles from "../Styles/PageNav.module.css";
+import btnStyles from "../Styles/Button.module.css";
+import Logo from "./Logo";
 
 export default function Navbar() {
-  const { nav, navList, navItem, navLink, active } = styles;
-
   return (
     <>
-      <nav className={nav}>
-        <ul className={navList}>
-          <li className={navItem}>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `${navLink} ${isActive ? active : ""}`
-              }
-            >
-              Home
-            </NavLink>
+      <nav className={styles.nav}>
+        <Logo />
+        <ul>
+          <li>
+            <NavLink to="/pricing">Pricing</NavLink>
           </li>
-          <li className={navItem}>
-            <NavLink
-              to="/pricing"
-              className={({ isActive }) =>
-                `${navLink} ${isActive ? active : ""}`
-              }
-            >
-              Pricing
-            </NavLink>
+          <li>
+            <NavLink to="/product">Product</NavLink>
           </li>
-          <li className={navItem}>
+          <li>
             <NavLink
-              to="/product"
-              className={({ isActive }) =>
-                `${navLink} ${isActive ? active : ""}`
-              }
+              to="/login"
+              className={`${btnStyles.btn} ${btnStyles.primary} `}
             >
-              Product
+              Login
             </NavLink>
           </li>
         </ul>

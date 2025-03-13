@@ -1,56 +1,34 @@
-/* Nav.module.css */
-
 .nav {
-  background-color: #333;
-  padding: 1rem 2rem;
-}
-
-.navList {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
 }
 
-.navItem {
-  margin: 0 15px;
-  position: relative;
-}
-
-.navLink {
+.nav a:link,
+.nav a:visited {
   text-decoration: none;
-  color: white;
-  font-size: 1.8rem;
-  padding: 0.8rem 1.2rem;
-  transition: color 0.3s ease-in-out;
+  color: var(--color-light--2);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
-/* Active Page Styling */
-.active {
-  color: #ffcc00;
-  font-weight: bold;
+/* CSS Modules feature */
+.nav a:global(.active) {
+  color: var(--color-brand--2);
 }
 
-/* Underline Effect for Hover and Active Page */
-.navLink::after {
-  content: "";
-  display: block;
-  height: 2px;
-  width: 0;
-  background-color: #ffcc00;
-  transition: width 0.3s ease-in-out;
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.navLink:hover::after,
-.active::after {
-  width: 100%;
-}
-
-:global(.test) {
-  background-color: red;
+a.ctaLink:link,
+a.ctaLink:visited {
+  background-color: var(--color-brand--2);
+  color: var(--color-dark--0);
+  padding: 0.8rem 2rem;
+  border-radius: 7px;
 }
