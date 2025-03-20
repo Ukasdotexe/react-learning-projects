@@ -5,8 +5,11 @@ import Spinner from "../spinner/Spinner.jsx";
 import Message from "../Message/Message.jsx";
 import styles from "./CountriesList.module.css";
 import CountryItem from "./CountryItem.jsx";
+import { useCity } from "../../Contexts/CityProvider.jsx";
 
-function CountriesList({ cities, isLoading }) {
+function CountriesList() {
+  const { cities, isLoading } = useCity();
+
   if (isLoading) return <Spinner />;
 
   if (!cities.length)
