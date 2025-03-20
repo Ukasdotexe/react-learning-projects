@@ -8,9 +8,9 @@ import CountryItem from "./CountryItem.jsx";
 import { useCity } from "../../Contexts/CityProvider.jsx";
 
 function CountriesList() {
-  const { cities, isLoading } = useCity();
+  const { cities, loading } = useCity();
 
-  if (isLoading) return <Spinner />;
+  if (loading) return <Spinner />;
 
   if (!cities.length)
     return (

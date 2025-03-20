@@ -1,8 +1,9 @@
-import styles from "./City.module.css";
-import { Link } from "react-router-dom";
-
 import { useParams } from "react-router-dom";
-import { useCity } from "../../Contexts/CityProvider";
+import styles from "./City.module.css";
+
+import useFetch from "../../Custom Hooks/useFetch";
+import Spinner from "../spinner/Spinner";
+import BackButton from "../Button/BackButton.jsx";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -13,12 +14,12 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function City() {
-  const { cities } = useCity();
   const { cityId } = useParams();
 
-  if (!cityId) return <h1>City NOT FOUND !</h1>;
+  const { data: currentCity, loading } = useFetch(`cities/${cityId}`);
 
-  const currentCity = cities.find((city) => Number(city.id) === Number(cityId));
+  if (loading) return <Spinner />;
+  if (!cityId) return <h1>City NOT FOUND !</h1>;
 
   const { cityName, emoji, date, notes } = currentCity;
 
@@ -30,19 +31,16 @@ function City() {
           <span>{emoji}</span> {cityName}
         </h3>
       </div>
-
       <div className={styles.row}>
         <h6>You went to {cityName} on</h6>
         <p>{formatDate(date || null)}</p>
       </div>
-
       {notes && (
         <div className={styles.row}>
           <h6>Your notes</h6>
           <p>{notes}</p>
         </div>
       )}
-
       <div className={styles.row}>
         <h6>Learn more</h6>
         <a
@@ -53,12 +51,9 @@ function City() {
           Check out {cityName} on Wikipedia &rarr;
         </a>
       </div>
-
-      <Link to="/app/cities">Back</Link>
-
-      {/* <ButtonBack /> */}
-
-      {/* <div><ButtonBack /></div> */}
+      <div>
+        <BackButton />
+      </div>
     </div>
   );
 }
