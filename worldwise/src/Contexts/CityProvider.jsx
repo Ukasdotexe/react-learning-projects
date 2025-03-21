@@ -2,15 +2,19 @@
 //
 
 import { createContext, useContext } from "react";
-import useFetch from "../Custom Hooks/useFetch";
+import { useFetch } from "../hooks/useFetch";
 
 const CityContext = createContext();
 
 function CityProvider({ children }) {
-  const { data: cities, loading } = useFetch("cities");
+  const { data: cities, setData: setCities, loading } = useFetch("cities");
 
+  function addCity(city) {
+    setCities([...cities, city]);
+  }
+  console.log(cities);
   return (
-    <CityContext.Provider value={{ cities, loading }}>
+    <CityContext.Provider value={{ cities, loading, addCity }}>
       {children}
     </CityContext.Provider>
   );

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 
-import useFetch from "../../Custom Hooks/useFetch";
+import { useFetch } from "../../hooks/useFetch";
 import Spinner from "../spinner/Spinner";
 import BackButton from "../Button/BackButton.jsx";
 
