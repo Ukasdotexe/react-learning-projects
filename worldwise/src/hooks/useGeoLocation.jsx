@@ -12,8 +12,7 @@ function useGeoLocation() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setIsLoading(true);
-        console.log("clicked!!");
-        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }); // Fixed the typo here
+        setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         setIsLoading(false);
       },
       (error) => {

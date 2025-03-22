@@ -10,7 +10,7 @@ import Spinner from "../spinner/Spinner.jsx";
 import { useCity } from "../../Contexts/CityProvider";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGeoLocation } from "../../hooks/useGeoLocation.jsx";
 import Button from "../Button/Button.jsx";
 import styles from "./Map.module.css";
@@ -50,7 +50,6 @@ function Map() {
     [geoLocationPosition]
   );
 
-  console.log("geolocation", geoLocationPosition);
   if (!cities) return <Spinner />;
 
   return (
@@ -105,7 +104,9 @@ function DetectClick() {
   const navigate = useNavigate();
   useMapEvent({
     click: (e) => {
-      navigate(`form?lat=${e.latlng.lat}&lang=${e.latlng.lng}}`);
+      navigate(
+        `form?lat=${e.latlng.lat}&lng=${e.latlng.lng}&timestamp=${Date.now()}`
+      );
     },
   });
 }

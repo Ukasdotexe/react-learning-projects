@@ -1,11 +1,17 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../Button/BackButton";
+import { useCity } from "../../Contexts/CityProvider";
+import useUrlPosition from "../../hooks/useUrlPosition";
+import Spinner from "../spinner/Spinner";
+import DatePicker from "react-datepicker";
+import Message from "../Message/Message.jsx";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -15,6 +21,8 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
+const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
 function Form() {
   const navigate = useNavigate();
 
@@ -22,9 +30,75 @@ function Form() {
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
+  const [countryFlag, setCountryFlag] = useState("");
 
+  const { mapLat, mapLng } = useUrlPosition();
+  const { addCity } = useCity();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(
+    function () {
+      const fetchData = async () => {
+        try {
+          if (!mapLat && !mapLng) return;
+
+          setIsLoading(true);
+
+          const response = await fetch(
+            `${BASE_URL}?latitude=${parseFloat(mapLat)}&longitude=${parseFloat(
+              mapLng
+            )}&timestamp=${Date.now()}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const result = await response.json();
+
+          setCityName(result.city || result.locality || "");
+          setCountry(result.countryName);
+          setCountryFlag(convertToEmoji(result.countryCode));
+        } catch (err) {
+          console.log(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    },
+    [mapLat, mapLng]
+  );
+
+  async function handleAddCity(e) {
+    e.preventDefault();
+
+    if (!cityName || !date) return;
+    const cityData = {
+      cityName,
+      country,
+      emoji: countryFlag,
+      date,
+      notes,
+      position: {
+        lat: mapLat,
+        lng: mapLng,
+      },
+    };
+
+    await addCity(cityData);
+
+    navigate("/app");
+  }
+
+  if (isLoading) return <Spinner />;
+
+  if (!mapLat && !mapLng)
+    return <Message message="Start by clicking somewhere in the map " />;
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleAddCity}>
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -32,15 +106,16 @@ function Form() {
           onChange={(e) => setCityName(e.target.value)}
           value={cityName}
         />
-        {/* <span className={styles.flag}>{emoji}</span> */}
+        <span className={styles.flag}>{countryFlag}</span>
       </div>
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        <DatePicker
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          selected={date}
+          onChange={(date) => setDate(date)}
+          dateFormat="dd/MM/yyyy"
         />
       </div>
 
