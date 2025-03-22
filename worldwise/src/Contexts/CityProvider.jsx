@@ -109,6 +109,7 @@ function CityProvider({ children }) {
       alert(error.message);
     }
   }
+
   return (
     <CityContext.Provider
       value={{

@@ -101,3 +101,11 @@ input:focus {
     "description": "Import CSS Module as `styles`"
   },
 */
+
+/*
+
+1- get email & pass and check with an api endpoint and check if info is correct
+2- if credentials are correct ? redirect user to the main app & save user object in state
+3- otherwise , we protect app from users who are not logged in .
+
+*/
