@@ -1,6 +1,6 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
@@ -21,21 +21,47 @@ export function convertToEmoji(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
+const initialState = {
+  cityName: "",
+  country: "",
+  date: new Date(),
+  notes: "",
+  countryFlag: "",
+  isLoading: false,
+};
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_City": {
+      const { city, locality, countryName, countryCode, date, notes } =
+        action.payload;
+      return {
+        ...state,
+        cityName: city || locality || state.cityName,
+        country: countryName || state.country,
+        countryFlag: countryCode
+          ? convertToEmoji(countryCode)
+          : state.countryFlag,
+        date: date || state.date,
+        notes: notes || state.notes,
+      };
+    }
+    case "SET_ISLOADING":
+      return { ...state, isLoading: action.payload };
+    default:
+      return state;
+  }
+}
+
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 function Form() {
   const navigate = useNavigate();
 
-  const [cityName, setCityName] = useState("");
-  const [country, setCountry] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [notes, setNotes] = useState("");
-  const [countryFlag, setCountryFlag] = useState("");
+  const [{ cityName, country, date, notes, countryFlag, isLoading }, dispatch] =
+    useReducer(reducer, initialState);
 
   const { mapLat, mapLng } = useUrlPosition();
   const { addCity } = useCity();
-
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(
     function () {
@@ -43,7 +69,7 @@ function Form() {
         try {
           if (!mapLat && !mapLng) return;
 
-          setIsLoading(true);
+          dispatch({ type: "SET_ISLOADING", payload: true });
 
           const response = await fetch(
             `${BASE_URL}?latitude=${parseFloat(mapLat)}&longitude=${parseFloat(
@@ -57,13 +83,11 @@ function Form() {
 
           const result = await response.json();
 
-          setCityName(result.city || result.locality || "");
-          setCountry(result.countryName);
-          setCountryFlag(convertToEmoji(result.countryCode));
+          dispatch({ type: "SET_City", payload: result });
         } catch (err) {
           console.log(err.message);
         } finally {
-          setIsLoading(false);
+          dispatch({ type: "SET_ISLOADING", payload: false });
         }
       };
 
@@ -76,6 +100,7 @@ function Form() {
     e.preventDefault();
 
     if (!cityName || !date) return;
+
     const cityData = {
       cityName,
       country,
@@ -97,13 +122,19 @@ function Form() {
 
   if (!mapLat && !mapLng)
     return <Message message="Start by clicking somewhere in the map " />;
+
   return (
     <form className={styles.form} onSubmit={handleAddCity}>
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
           id="cityName"
-          onChange={(e) => setCityName(e.target.value)}
+          onChange={(e) =>
+            dispatch({
+              type: "SET_City",
+              payload: { cityName: e.target.value },
+            })
+          }
           value={cityName}
         />
         <span className={styles.flag}>{countryFlag}</span>
@@ -114,7 +145,7 @@ function Form() {
         <DatePicker
           id="date"
           selected={date}
-          onChange={(date) => setDate(date)}
+          onChange={(date) => dispatch({ type: "SET_City", payload: { date } })}
           dateFormat="dd/MM/yyyy"
         />
       </div>
@@ -123,7 +154,12 @@ function Form() {
         <label htmlFor="notes">Notes about your trip to {cityName}</label>
         <textarea
           id="notes"
-          onChange={(e) => setNotes(e.target.value)}
+          onChange={(e) =>
+            dispatch({
+              type: "SET_City",
+              payload: { notes: e.target.value },
+            })
+          }
           value={notes}
         />
       </div>
